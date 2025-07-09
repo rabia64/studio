@@ -87,7 +87,7 @@ export default function AddTask({ addTask, className }: AddTaskProps) {
       <DialogTrigger asChild>
         <button
           className={cn(
-            "w-64 h-64 min-w-64 min-h-64 border-4 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+            "w-56 h-56 min-w-56 min-h-56 border-4 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
             className
           )}
         >

@@ -52,7 +52,7 @@ export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
     <div className={cn("animate-in fade-in zoom-in-95 duration-300", className)}>
         <Card
         className={cn(
-            "w-64 h-64 min-w-64 min-h-64 shadow-lg flex flex-col relative overflow-visible",
+            "w-56 h-56 min-w-56 min-h-56 shadow-lg flex flex-col relative overflow-visible",
             styles.bg,
             styles.text,
             styles.border
