@@ -3,7 +3,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Plus } from "lucide-react";
+import { Plus, Calendar as CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -34,6 +35,8 @@ import {
 import { Task } from "@/lib/types";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const formSchema = z.object({
   title: z.string().min(2, { message: "Title must be at least 2 characters." }),
@@ -46,6 +49,9 @@ const formSchema = z.object({
   time: z.coerce
     .number({ invalid_type_error: "Time must be a number." })
     .min(1, { message: "Time must be at least 1 minute." }),
+  dueDate: z.date({
+    required_error: "A due date is required.",
+  }),
 });
 
 interface AddTaskProps {
@@ -62,11 +68,16 @@ export default function AddTask({ addTask, className }: AddTaskProps) {
       title: "",
       time: 15,
       priority: "Medium",
+      dueDate: undefined,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    addTask(values as Omit<Task, "id">);
+    const taskData = {
+      ...values,
+      dueDate: values.dueDate.toISOString(),
+    }
+    addTask(taskData as Omit<Task, "id">);
     form.reset();
     setOpen(false);
   }
@@ -154,6 +165,47 @@ export default function AddTask({ addTask, className }: AddTaskProps) {
                       <SelectItem value="High">High</SelectItem>
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="dueDate"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Due Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date < new Date(new Date().setDate(new Date().getDate() - 1))
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
                   <FormMessage />
                 </FormItem>
               )}

@@ -7,4 +7,5 @@ export interface Task {
   category: TaskCategory;
   time: number;
   priority: TaskPriority;
+  dueDate: string;
 }

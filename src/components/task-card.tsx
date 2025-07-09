@@ -1,7 +1,8 @@
 
 "use client";
 
-import { Home, Briefcase, ClipboardList, Clock, Trash2, Flame } from "lucide-react";
+import { Home, Briefcase, ClipboardList, Clock, Trash2, Flame, CalendarDays } from "lucide-react";
+import { format } from "date-fns";
 import { Task, TaskCategory, TaskPriority } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -76,9 +77,15 @@ export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
             </CardTitle>
         </CardHeader>
         <CardContent className="flex-grow flex items-end justify-between">
-            <div className="flex items-center gap-2 text-sm font-semibold">
-            <Clock className="h-4 w-4" />
-            <span>{task.time} minutes</span>
+            <div className="flex flex-col gap-2 text-sm font-semibold">
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4" />
+                <span>{task.time} minutes</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CalendarDays className="h-4 w-4" />
+                <span>{format(new Date(task.dueDate), "PP")}</span>
+              </div>
             </div>
             <div className="flex items-center gap-1">
                 {Array.from({ length: priorityIcons[task.priority].count }).map((_, i) => (
