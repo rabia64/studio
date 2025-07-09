@@ -52,7 +52,7 @@ export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
     <div className={cn("animate-in fade-in zoom-in-95 duration-300", className)}>
         <Card
         className={cn(
-            "w-56 h-56 min-w-56 min-h-56 shadow-lg flex flex-col relative overflow-visible",
+            "w-56 h-56 min-w-56 min-h-56 shadow-lg flex flex-col relative overflow-visible font-chalkboard",
             styles.bg,
             styles.text,
             styles.border
@@ -70,14 +70,14 @@ export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
             </Button>
         </div>
         <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-6 h-6 bg-yellow-400 rounded-full shadow-md border-2 border-yellow-500" aria-hidden="true"></div>
-        <CardHeader className="flex-shrink-0 pt-6">
-            <CardTitle className="flex items-start gap-2 text-lg font-bold break-words">
+        <CardHeader className="flex-shrink-0 p-4">
+            <CardTitle className="flex items-start gap-2 text-2xl break-words">
             {styles.icon}
             {task.title}
             </CardTitle>
         </CardHeader>
-        <CardContent className="flex-grow flex items-end justify-between">
-            <div className="flex flex-col gap-2 text-sm font-semibold">
+        <CardContent className="p-4 pt-2 flex-grow flex items-end justify-between">
+            <div className="flex flex-col gap-2 text-base">
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
                 <span>{task.time} minutes</span>

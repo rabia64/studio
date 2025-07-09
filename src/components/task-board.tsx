@@ -103,7 +103,7 @@ export default function TaskBoard() {
           className="w-full pl-11"
         />
       </div>
-      <div className="flex-1 flex items-start gap-8 p-6 pt-12 overflow-x-auto scroll-container">
+      <div className="flex-1 flex items-start gap-8 p-6 pt-4 overflow-x-auto scroll-container">
         {filteredTasks.length === 0 && (
           <div className="m-auto text-center text-gray-500">
             <h2 className="text-2xl font-semibold">
