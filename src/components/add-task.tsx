@@ -31,7 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Task, TaskCategory } from "@/lib/types";
+import { Task } from "@/lib/types";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -39,6 +39,9 @@ const formSchema = z.object({
   title: z.string().min(2, { message: "Title must be at least 2 characters." }),
   category: z.enum(["Home", "Work", "Miscellaneous"], {
     errorMap: () => ({ message: "Please select a category." }),
+  }),
+  priority: z.enum(["Low", "Medium", "High"], {
+    errorMap: () => ({ message: "Please select a priority." }),
   }),
   time: z.coerce
     .number({ invalid_type_error: "Time must be a number." })
@@ -58,6 +61,7 @@ export default function AddTask({ addTask, className }: AddTaskProps) {
     defaultValues: {
       title: "",
       time: 15,
+      priority: "Medium",
     },
   });
 
@@ -123,6 +127,31 @@ export default function AddTask({ addTask, className }: AddTaskProps) {
                       <SelectItem value="Home">Home</SelectItem>
                       <SelectItem value="Work">Work</SelectItem>
                       <SelectItem value="Miscellaneous">Miscellaneous</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="priority"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Priority</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a priority" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Low">Low</SelectItem>
+                      <SelectItem value="Medium">Medium</SelectItem>
+                      <SelectItem value="High">High</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

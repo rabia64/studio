@@ -8,9 +8,9 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
 const initialTasks: Task[] = [
-    { id: '1', title: 'Weekly project report', category: 'Work', time: 60 },
-    { id: '2', title: 'Buy groceries', category: 'Home', time: 45 },
-    { id: '3', title: 'Call the dentist', category: 'Miscellaneous', time: 10 },
+    { id: '1', title: 'Weekly project report', category: 'Work', time: 60, priority: 'High' },
+    { id: '2', title: 'Buy groceries', category: 'Home', time: 45, priority: 'Medium' },
+    { id: '3', title: 'Call the dentist', category: 'Miscellaneous', time: 10, priority: 'Low' },
 ];
 
 export default function TaskBoard() {

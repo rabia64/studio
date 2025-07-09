@@ -1,7 +1,7 @@
 "use client";
 
-import { Home, Briefcase, ClipboardList, Clock, Trash2 } from "lucide-react";
-import { Task, TaskCategory } from "@/lib/types";
+import { Home, Briefcase, ClipboardList, Clock, Trash2, Flame } from "lucide-react";
+import { Task, TaskCategory, TaskPriority } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -40,6 +40,11 @@ const categoryStyles: Record<TaskCategory, {
 
 export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
   const styles = categoryStyles[task.category];
+  const priorityIcons: Record<TaskPriority, { count: number; color: string }> = {
+    High: { count: 3, color: "text-red-500" },
+    Medium: { count: 2, color: "text-orange-400" },
+    Low: { count: 1, color: "text-yellow-400" },
+  };
 
   return (
     <div className={cn("animate-in fade-in zoom-in-95 duration-300", className)}>
@@ -69,10 +74,15 @@ export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
             {task.title}
             </CardTitle>
         </CardHeader>
-        <CardContent className="flex-grow flex items-end justify-start">
+        <CardContent className="flex-grow flex items-end justify-between">
             <div className="flex items-center gap-2 text-sm font-semibold">
             <Clock className="h-4 w-4" />
             <span>{task.time} minutes</span>
+            </div>
+            <div className="flex items-center gap-1">
+                {Array.from({ length: priorityIcons[task.priority].count }).map((_, i) => (
+                    <Flame key={i} className={cn("h-4 w-4", priorityIcons[task.priority].color)} />
+                ))}
             </div>
         </CardContent>
         </Card>
