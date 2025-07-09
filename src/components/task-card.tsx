@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Home, Briefcase, ClipboardList, Clock, Trash2, Flame } from "lucide-react";
@@ -67,8 +68,8 @@ export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
                 <Trash2 className="h-4 w-4" />
             </Button>
         </div>
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 w-5 h-5 bg-gray-300 rounded-full shadow-inner border-2 border-gray-400" aria-hidden="true"></div>
-        <CardHeader className="flex-shrink-0 pt-8">
+        <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-6 h-6 bg-yellow-400 rounded-full shadow-md border-2 border-yellow-500" aria-hidden="true"></div>
+        <CardHeader className="flex-shrink-0 pt-6">
             <CardTitle className="flex items-start gap-2 text-lg font-bold break-words">
             {styles.icon}
             {task.title}
