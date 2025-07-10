@@ -11,7 +11,7 @@ export default {
     extend: {
       fontFamily: {
         body: ['"PT Sans"', 'sans-serif'],
-        chalkboard: ['"Gochi Hand"', 'cursive'],
+        chalkboard: ['"Indie Flower"', 'cursive'],
         code: ['monospace'],
       },
       colors: {
