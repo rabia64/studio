@@ -54,13 +54,13 @@ export default function TaskCard({ task, onDelete, onEdit, className }: TaskCard
       className={cn("animate-in fade-in zoom-in-95 duration-300 transform", className)}>
         <Card
         className={cn(
-            "w-56 h-56 min-w-56 min-h-56 shadow-lg flex flex-col relative overflow-hidden font-chalkboard transition-transform hover:scale-105",
+            "w-56 h-56 min-w-56 min-h-56 shadow-lg flex flex-col relative font-chalkboard transition-transform hover:scale-105",
             styles.bg,
             styles.text,
             styles.border
         )}
         >
-        <div className="absolute -top-3 -right-3 z-10 flex gap-1">
+        <div className="absolute top-2 right-2 z-10 flex gap-1">
              <Button
                 variant="secondary"
                 size="icon"
@@ -81,7 +81,7 @@ export default function TaskCard({ task, onDelete, onEdit, className }: TaskCard
             </Button>
         </div>
         <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-6 h-6 bg-yellow-400 rounded-full shadow-md border-2 border-yellow-500" aria-hidden="true"></div>
-        <CardHeader className="flex-shrink-0 p-4 overflow-hidden">
+        <CardHeader className="flex-shrink-0 p-4 pt-8 pr-12 overflow-hidden">
             <CardTitle className="flex items-start gap-2 text-2xl h-full break-words">
             {styles.icon}
             <span className="flex-grow">{task.title}</span>
