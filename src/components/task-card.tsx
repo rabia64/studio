@@ -82,7 +82,7 @@ export default function TaskCard({ task, onDelete, onEdit, className }: TaskCard
         </div>
         <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-6 h-6 bg-yellow-400 rounded-full shadow-md border-2 border-yellow-500" aria-hidden="true"></div>
         <CardHeader className="flex-shrink-0 p-4 overflow-hidden">
-            <CardTitle className="flex items-start gap-2 text-2xl h-full overflow-y-auto break-words">
+            <CardTitle className="flex items-start gap-2 text-2xl h-full break-words">
             {styles.icon}
             <span className="flex-grow">{task.title}</span>
             </CardTitle>
