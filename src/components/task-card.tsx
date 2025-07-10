@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Home, Briefcase, ClipboardList, Trash2, Flame, CalendarDays } from "lucide-react";
+import { Home, Briefcase, ClipboardList, Trash2, Flame, CalendarDays, Pencil } from "lucide-react";
 import { format } from "date-fns";
 import { Task, TaskCategory, TaskPriority } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 interface TaskCardProps {
   task: Task;
   onDelete: (id: string) => void;
+  onEdit: (task: Task) => void;
   className?: string;
 }
 
@@ -40,7 +41,7 @@ const categoryStyles: Record<TaskCategory, {
   },
 };
 
-export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
+export default function TaskCard({ task, onDelete, onEdit, className }: TaskCardProps) {
   const styles = categoryStyles[task.category];
   const priorityIcons: Record<TaskPriority, { count: number; color: string }> = {
     High: { count: 3, color: "text-red-500" },
@@ -59,8 +60,17 @@ export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
             styles.border
         )}
         >
-        <div className="absolute -top-3 -right-3 z-10">
+        <div className="absolute -top-3 -right-3 z-10 flex gap-1">
              <Button
+                variant="secondary"
+                size="icon"
+                className="h-8 w-8 rounded-full shadow-md"
+                onClick={(e) => { e.stopPropagation(); onEdit(task); }}
+                aria-label={`Edit task: ${task.title}`}
+            >
+                <Pencil className="h-4 w-4" />
+            </Button>
+            <Button
                 variant="destructive"
                 size="icon"
                 className="h-8 w-8 rounded-full shadow-md"
@@ -71,7 +81,7 @@ export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
             </Button>
         </div>
         <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-6 h-6 bg-yellow-400 rounded-full shadow-md border-2 border-yellow-500" aria-hidden="true"></div>
-        <CardHeader className="flex-shrink-0 p-4">
+        <CardHeader className="flex-shrink-0 p-4 overflow-y-auto">
             <CardTitle className="flex items-start gap-2 text-2xl break-words">
             {styles.icon}
             {task.title}

@@ -13,6 +13,7 @@ interface TaskBoardProps {
   categoryFilter: TaskCategory | "all";
   tasks: Task[];
   setTasks: (tasks: Task[]) => void;
+  onEditTask: (task: Task) => void;
 }
 
 const priorityOrder: Record<TaskPriority, number> = {
@@ -21,7 +22,7 @@ const priorityOrder: Record<TaskPriority, number> = {
   Low: 3,
 };
 
-export default function TaskBoard({ searchTerm, priorityFilter, categoryFilter, tasks, setTasks }: TaskBoardProps) {
+export default function TaskBoard({ searchTerm, priorityFilter, categoryFilter, tasks, setTasks, onEditTask }: TaskBoardProps) {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -132,6 +133,7 @@ export default function TaskBoard({ searchTerm, priorityFilter, categoryFilter, 
                 key={task.id}
                 task={task}
                 onDelete={deleteTask}
+                onEdit={onEditTask}
                 />
             ))}
         </div>

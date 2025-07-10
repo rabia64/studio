@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -50,39 +51,63 @@ const formSchema = z.object({
 });
 
 interface AddTaskProps {
-  addTask: (task: Omit<Task, "id">) => void;
+  manageTask: (task: Omit<Task, "id">, id?: string) => void;
   open: boolean;
   setOpen: (open: boolean) => void;
+  taskToEdit: Task | null;
 }
 
-export default function AddTask({ addTask, open, setOpen }: AddTaskProps) {
+export default function AddTask({ manageTask, open, setOpen, taskToEdit }: AddTaskProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
+      category: "Miscellaneous",
       priority: "Medium",
       dueDate: undefined,
     },
   });
+
+  useEffect(() => {
+    if (taskToEdit && open) {
+      form.reset({
+        ...taskToEdit,
+        dueDate: new Date(taskToEdit.dueDate),
+      });
+    } else {
+      form.reset({
+        title: "",
+        category: "Miscellaneous",
+        priority: "Medium",
+        dueDate: new Date(),
+      });
+    }
+  }, [taskToEdit, open, form]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const taskData = {
       ...values,
       dueDate: values.dueDate.toISOString(),
     }
-    addTask(taskData as Omit<Task, "id">);
-    form.reset();
+    manageTask(taskData as Omit<Task, "id">, taskToEdit?.id);
     setOpen(false);
+  }
+  
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (!isOpen) {
+      form.reset();
+    }
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create a new task</DialogTitle>
+          <DialogTitle>{taskToEdit ? "Edit task" : "Create a new task"}</DialogTitle>
           <DialogDescription>
-            Fill in the details below to add a new task to your board.
+            {taskToEdit ? "Update the details for your task." : "Fill in the details below to add a new task to your board."}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -108,7 +133,7 @@ export default function AddTask({ addTask, open, setOpen }: AddTaskProps) {
                   <FormLabel>Category</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -133,7 +158,7 @@ export default function AddTask({ addTask, open, setOpen }: AddTaskProps) {
                   <FormLabel>Priority</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -192,7 +217,7 @@ export default function AddTask({ addTask, open, setOpen }: AddTaskProps) {
               )}
             />
             <DialogFooter>
-              <Button type="submit">Add Task</Button>
+              <Button type="submit">{taskToEdit ? "Save changes" : "Add Task"}</Button>
             </DialogFooter>
           </form>
         </Form>

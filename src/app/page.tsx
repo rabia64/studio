@@ -26,17 +26,41 @@ export default function Home() {
   const [categoryFilter, setCategoryFilter] = useState<TaskCategory | "all">(
     "all"
   );
-  const [isAddTaskOpen, setAddTaskOpen] = useState(false);
+  const [isTaskDialogOpen, setTaskDialogOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [tasks, setTasks] = useLocalStorage<Task[]>("tasks", []);
   const { toast } = useToast();
 
-  const addTask = (task: Omit<Task, "id">) => {
-    const newTask = { ...task, id: crypto.randomUUID() };
-    setTasks((prevTasks) => [...prevTasks, newTask]);
-    toast({
-      title: "Task Added!",
-      description: `"${task.title}" has been added to your board.`,
-    });
+  const handleOpenDialog = (task: Task | null = null) => {
+    setEditingTask(task);
+    setTaskDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setEditingTask(null);
+    setTaskDialogOpen(false);
+  };
+
+  const manageTask = (taskData: Omit<Task, "id">, id?: string) => {
+    if (id) {
+      // Editing task
+      const updatedTasks = tasks.map((t) =>
+        t.id === id ? { ...t, ...taskData } : t
+      );
+      setTasks(updatedTasks);
+      toast({
+        title: "Task Updated!",
+        description: `"${taskData.title}" has been updated.`,
+      });
+    } else {
+      // Adding new task
+      const newTask = { ...taskData, id: crypto.randomUUID() };
+      setTasks((prevTasks) => [...prevTasks, newTask]);
+      toast({
+        title: "Task Added!",
+        description: `"${taskData.title}" has been added to your board.`,
+      });
+    }
   };
 
   return (
@@ -98,12 +122,18 @@ export default function Home() {
           categoryFilter={categoryFilter}
           tasks={tasks}
           setTasks={setTasks}
+          onEditTask={handleOpenDialog}
         />
       </main>
 
-      <AddTask open={isAddTaskOpen} setOpen={setAddTaskOpen} addTask={addTask} />
+      <AddTask 
+        open={isTaskDialogOpen} 
+        setOpen={setTaskDialogOpen} 
+        manageTask={manageTask}
+        taskToEdit={editingTask}
+      />
       <button
-        onClick={() => setAddTaskOpen(true)}
+        onClick={() => handleOpenDialog()}
         className="fixed bottom-8 right-8 bg-primary text-primary-foreground rounded-full p-4 shadow-lg hover:bg-primary/90 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
         aria-label="Add New Task"
       >
