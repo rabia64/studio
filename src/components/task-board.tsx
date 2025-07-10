@@ -6,21 +6,6 @@ import { Task, TaskPriority, TaskCategory } from "@/lib/types";
 import TaskCard from "./task-card";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  rectSwappingStrategy,
-} from '@dnd-kit/sortable';
 
 interface TaskBoardProps {
   searchTerm: string;
@@ -39,12 +24,6 @@ const priorityOrder: Record<TaskPriority, number> = {
 export default function TaskBoard({ searchTerm, priorityFilter, categoryFilter, tasks, setTasks }: TaskBoardProps) {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
 
   useEffect(() => {
     const storedTasksRaw = window.localStorage.getItem('tasks');
@@ -122,16 +101,6 @@ export default function TaskBoard({ searchTerm, priorityFilter, categoryFilter, 
 
   }, [tasks, searchTerm, priorityFilter, categoryFilter]);
 
-  function handleDragEnd(event: DragEndEvent) {
-    const {active, over} = event;
-    
-    if (over && active.id !== over.id) {
-      const oldIndex = tasks.findIndex((task) => task.id === active.id);
-      const newIndex = tasks.findIndex((task) => task.id === over.id);
-      
-      setTasks(arrayMove(tasks, oldIndex, newIndex));
-    }
-  }
 
   if (loading) {
     return (
@@ -144,40 +113,29 @@ export default function TaskBoard({ searchTerm, priorityFilter, categoryFilter, 
   }
 
   return (
-    <DndContext 
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext 
-        items={tasks.map(task => task.id)}
-        strategy={rectSwappingStrategy}
-      >
-        <div className="p-8">
-          {filteredTasks.length === 0 ? (
-            <div className="text-center text-gray-500 mt-16">
-              <h2 className="text-2xl font-semibold">
-                {searchTerm || priorityFilter !== 'all' || categoryFilter !== 'all' ? "No tasks found" : "Your board is empty!"}
-              </h2>
-              <p className="mt-2">
-                {searchTerm || priorityFilter !== 'all' || categoryFilter !== 'all'
-                  ? "Try adjusting your search or filters."
-                  : "Click the '+' button to get started."}
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(224px,1fr))] gap-8">
-                {filteredTasks.map((task) => (
-                    <TaskCard
-                    key={task.id}
-                    task={task}
-                    onDelete={deleteTask}
-                    />
-                ))}
-            </div>
-          )}
+    <div className="p-8">
+        {filteredTasks.length === 0 ? (
+        <div className="text-center text-gray-500 mt-16">
+            <h2 className="text-2xl font-semibold">
+            {searchTerm || priorityFilter !== 'all' || categoryFilter !== 'all' ? "No tasks found" : "Your board is empty!"}
+            </h2>
+            <p className="mt-2">
+            {searchTerm || priorityFilter !== 'all' || categoryFilter !== 'all'
+                ? "Try adjusting your search or filters."
+                : "Click the '+' button to get started."}
+            </p>
         </div>
-      </SortableContext>
-    </DndContext>
+        ) : (
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(224px,1fr))] gap-8">
+            {filteredTasks.map((task) => (
+                <TaskCard
+                key={task.id}
+                task={task}
+                onDelete={deleteTask}
+                />
+            ))}
+        </div>
+        )}
+    </div>
   );
 }

@@ -1,14 +1,12 @@
 
 "use client";
 
-import { Home, Briefcase, ClipboardList, Trash2, Flame, CalendarDays, GripVertical } from "lucide-react";
+import { Home, Briefcase, ClipboardList, Trash2, Flame, CalendarDays } from "lucide-react";
 import { format } from "date-fns";
 import { Task, TaskCategory, TaskPriority } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 
 interface TaskCardProps {
   task: Task;
@@ -43,22 +41,6 @@ const categoryStyles: Record<TaskCategory, {
 };
 
 export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({id: task.id});
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    zIndex: isDragging ? 10 : 'auto',
-    opacity: isDragging ? 0.5 : 1,
-  };
-
   const styles = categoryStyles[task.category];
   const priorityIcons: Record<TaskPriority, { count: number; color: string }> = {
     High: { count: 3, color: "text-red-500" },
@@ -68,8 +50,6 @@ export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
 
   return (
     <div
-      ref={setNodeRef}
-      style={style}
       className={cn("animate-in fade-in zoom-in-95 duration-300 transform", className)}>
         <Card
         className={cn(
@@ -79,9 +59,6 @@ export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
             styles.border
         )}
         >
-        <div {...attributes} {...listeners} className="absolute top-1/2 -left-3 -translate-y-1/2 cursor-grab p-1 touch-none">
-          <GripVertical className="h-6 w-6 text-slate-500/50"/>
-        </div>
         <div className="absolute -top-3 -right-3 z-10">
              <Button
                 variant="destructive"
