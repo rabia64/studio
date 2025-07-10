@@ -25,19 +25,19 @@ const categoryStyles: Record<TaskCategory, {
     bg: "bg-pink-200/80",
     text: "text-pink-900",
     border: "border-pink-300",
-    icon: <Home className="h-5 w-5" />,
+    icon: <Home className="h-5 w-5 flex-shrink-0" />,
   },
   Work: {
     bg: "bg-yellow-200/80",
     text: "text-yellow-900",
     border: "border-yellow-300",
-    icon: <Briefcase className="h-5 w-5" />,
+    icon: <Briefcase className="h-5 w-5 flex-shrink-0" />,
   },
   Miscellaneous: {
     bg: "bg-green-200/80",
     text: "text-green-900",
     border: "border-green-300",
-    icon: <ClipboardList className="h-5 w-5" />,
+    icon: <ClipboardList className="h-5 w-5 flex-shrink-0" />,
   },
 };
 
@@ -54,7 +54,7 @@ export default function TaskCard({ task, onDelete, onEdit, className }: TaskCard
       className={cn("animate-in fade-in zoom-in-95 duration-300 transform", className)}>
         <Card
         className={cn(
-            "w-56 h-56 min-w-56 min-h-56 shadow-lg flex flex-col relative overflow-visible font-chalkboard transition-transform hover:scale-105",
+            "w-56 h-56 min-w-56 min-h-56 shadow-lg flex flex-col relative overflow-hidden font-chalkboard transition-transform hover:scale-105",
             styles.bg,
             styles.text,
             styles.border
@@ -81,13 +81,13 @@ export default function TaskCard({ task, onDelete, onEdit, className }: TaskCard
             </Button>
         </div>
         <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-6 h-6 bg-yellow-400 rounded-full shadow-md border-2 border-yellow-500" aria-hidden="true"></div>
-        <CardHeader className="flex-shrink-0 p-4 overflow-y-auto">
-            <CardTitle className="flex items-start gap-2 text-2xl break-words">
+        <CardHeader className="flex-shrink-0 p-4 overflow-hidden">
+            <CardTitle className="flex items-start gap-2 text-2xl h-full overflow-y-auto break-words">
             {styles.icon}
-            {task.title}
+            <span className="flex-grow">{task.title}</span>
             </CardTitle>
         </CardHeader>
-        <CardContent className="p-4 pt-0 flex-grow flex items-end justify-between">
+        <CardContent className="p-4 pt-0 flex-grow flex items-end justify-between mt-auto border-t">
             <div className="flex flex-col gap-2 text-base">
               <div className="flex items-center gap-2">
                 <CalendarDays className="h-4 w-4" />
