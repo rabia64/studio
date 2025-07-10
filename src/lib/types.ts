@@ -5,7 +5,6 @@ export interface Task {
   id: string;
   title: string;
   category: TaskCategory;
-  time: number;
   priority: TaskPriority;
   dueDate: string;
 }

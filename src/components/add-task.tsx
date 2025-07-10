@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Plus, Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -33,7 +32,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Task } from "@/lib/types";
-import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -46,9 +44,6 @@ const formSchema = z.object({
   priority: z.enum(["Low", "Medium", "High"], {
     errorMap: () => ({ message: "Please select a priority." }),
   }),
-  time: z.coerce
-    .number({ invalid_type_error: "Time must be a number." })
-    .min(1, { message: "Time must be at least 1 minute." }),
   dueDate: z.date({
     required_error: "A due date is required.",
   }),
@@ -56,17 +51,16 @@ const formSchema = z.object({
 
 interface AddTaskProps {
   addTask: (task: Omit<Task, "id">) => void;
-  className?: string;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
-export default function AddTask({ addTask, className }: AddTaskProps) {
-  const [open, setOpen] = useState(false);
+export default function AddTask({ addTask, open, setOpen }: AddTaskProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      time: 15,
       priority: "Medium",
       dueDate: undefined,
     },
@@ -84,19 +78,6 @@ export default function AddTask({ addTask, className }: AddTaskProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <button
-          className={cn(
-            "w-56 h-56 min-w-56 min-h-56 border-4 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-            className
-          )}
-        >
-          <div className="text-center">
-            <Plus className="h-16 w-16 mx-auto" />
-            <p className="mt-2 text-lg font-semibold">Add New Task</p>
-          </div>
-        </button>
-      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create a new task</DialogTitle>
@@ -206,19 +187,6 @@ export default function AddTask({ addTask, className }: AddTaskProps) {
                       />
                     </PopoverContent>
                   </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="time"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Time required (minutes)</FormLabel>
-                  <FormControl>
-                    <Input type="number" placeholder="15" {...field} />
-                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

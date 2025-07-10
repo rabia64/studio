@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Home, Briefcase, ClipboardList, Clock, Trash2, Flame, CalendarDays } from "lucide-react";
+import { Home, Briefcase, ClipboardList, Trash2, Flame, CalendarDays } from "lucide-react";
 import { format } from "date-fns";
 import { Task, TaskCategory, TaskPriority } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -49,7 +49,7 @@ export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
   };
 
   return (
-    <div className={cn("animate-in fade-in zoom-in-95 duration-300", className)}>
+    <div className={cn("animate-in fade-in zoom-in-95 duration-300 transform transition-transform hover:scale-105", className)}>
         <Card
         className={cn(
             "w-56 h-56 min-w-56 min-h-56 shadow-lg flex flex-col relative overflow-visible font-chalkboard",
@@ -58,7 +58,7 @@ export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
             styles.border
         )}
         >
-        <div className="absolute -top-3 -right-3">
+        <div className="absolute -top-3 -right-3 z-10">
              <Button
                 variant="destructive"
                 size="icon"
@@ -76,12 +76,8 @@ export default function TaskCard({ task, onDelete, className }: TaskCardProps) {
             {task.title}
             </CardTitle>
         </CardHeader>
-        <CardContent className="p-4 pt-2 flex-grow flex items-end justify-between">
+        <CardContent className="p-4 pt-0 flex-grow flex items-end justify-between">
             <div className="flex flex-col gap-2 text-base">
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                <span>{task.time} minutes</span>
-              </div>
               <div className="flex items-center gap-2">
                 <CalendarDays className="h-4 w-4" />
                 <span>{format(new Date(task.dueDate), "PP")}</span>
